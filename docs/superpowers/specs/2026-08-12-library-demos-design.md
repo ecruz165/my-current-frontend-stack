@@ -1,7 +1,7 @@
 # Library Demos — Design
 
 **Date:** 2026-08-12
-**Status:** In review (design approved in chat 2026-08-12)
+**Status:** Approved (2026-08-12)
 **Parent spec:** `2026-08-12-hello-world-stack-design.md` — this spec restores its founding rule ("every listed library is installed, configured, and *used*") for the dependencies staged on 2026-08-12.
 
 ## Overview
