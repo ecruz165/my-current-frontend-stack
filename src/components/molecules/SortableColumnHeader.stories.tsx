@@ -1,29 +1,27 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   type ColumnDef,
-  getCoreRowModel,
-  getSortedRowModel,
   type SortingState,
-  useReactTable,
+  useTable,
 } from '@tanstack/react-table';
 import { useState } from 'react';
+import { features } from '@/lib/table';
 import { users } from '@/mocks/fixtures';
 import type { User } from '@/schemas/user';
 import { SortableColumnHeader } from './SortableColumnHeader';
 
-const columns: ColumnDef<User>[] = [{ accessorKey: 'name' }];
+const columns: ColumnDef<typeof features, User>[] = [{ accessorKey: 'name' }];
 
 // A Column instance only exists inside a table, so the story wraps the
 // header in a minimal live table — click it and watch the list re-sort.
 function SortableColumnHeaderDemo() {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const table = useReactTable({
-    data: users,
+  const table = useTable({
+    features,
     columns,
+    data: users,
     state: { sorting },
     onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   });
   const column = table.getColumn('name');
   if (!column) throw new Error('name column is not defined');

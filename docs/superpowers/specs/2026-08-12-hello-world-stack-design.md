@@ -29,7 +29,7 @@ Latest stable release of each at scaffold time; majors listed are the compatibil
 | Components | shadcn/ui CLI v4; Base UI primitives arrive as its dependencies (no Radix) |
 | Routing | TanStack Router v1, file-based via Vite plugin |
 | Server state | TanStack Query v5 |
-| Tables | TanStack Table v8 |
+| Tables | TanStack Table v9 (feature-composed via `tableFeatures`) |
 | Validation | Zod v4 |
 | Lint/format | Biome 2 (sole linter and formatter; no ESLint/Prettier) |
 | API mocking | MSW 2 |

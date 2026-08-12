@@ -1,11 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
   type SortingState,
-  useReactTable,
+  useTable,
 } from '@tanstack/react-table';
 import { useState } from 'react';
 import { Spinner } from '@/components/atoms/Spinner';
@@ -20,9 +17,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { fetchUsers } from '@/lib/api';
+import { features } from '@/lib/table';
 import type { User } from '@/schemas/user';
 
-const columns: ColumnDef<User>[] = [
+const columns: ColumnDef<typeof features, User>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
@@ -43,7 +41,7 @@ const columns: ColumnDef<User>[] = [
 ];
 
 // Split in two because hooks can't sit below early returns: the outer
-// component maps Query state, the inner one calls useReactTable.
+// component maps Query state, the inner one calls useTable.
 export function UsersTable() {
   const query = useQuery({ queryKey: ['users'], queryFn: fetchUsers });
 
@@ -60,13 +58,12 @@ export function UsersTable() {
 
 function SortableUsersTable({ users }: { users: User[] }) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const table = useReactTable({
-    data: users,
+  const table = useTable({
+    features,
     columns,
+    data: users,
     state: { sorting },
     onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -76,12 +73,9 @@ function SortableUsersTable({ users }: { users: User[] }) {
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <TableHead key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
+                {header.isPlaceholder ? null : (
+                  <table.FlexRender header={header} />
+                )}
               </TableHead>
             ))}
           </TableRow>
@@ -90,9 +84,9 @@ function SortableUsersTable({ users }: { users: User[] }) {
       <TableBody>
         {table.getRowModel().rows.map((row) => (
           <TableRow key={row.id}>
-            {row.getVisibleCells().map((cell) => (
+            {row.getAllCells().map((cell) => (
               <TableCell key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                <table.FlexRender cell={cell} />
               </TableCell>
             ))}
           </TableRow>

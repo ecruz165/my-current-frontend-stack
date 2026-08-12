@@ -1,14 +1,17 @@
-import type { Column } from '@tanstack/react-table';
+import type { Column, RowData } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
+import type { Features } from '@/lib/table';
 
-interface SortableColumnHeaderProps<TData> {
-  column: Column<TData, unknown>;
+// Bound to the app's Features (which includes rowSortingFeature) so the
+// sorting methods are guaranteed to exist on the column type.
+interface SortableColumnHeaderProps<TData extends RowData> {
+  column: Column<Features, TData, unknown>;
   children: ReactNode;
 }
 
-export function SortableColumnHeader<TData>({
+export function SortableColumnHeader<TData extends RowData>({
   column,
   children,
 }: SortableColumnHeaderProps<TData>) {
