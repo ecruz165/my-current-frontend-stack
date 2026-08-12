@@ -30,6 +30,7 @@ Latest stable release of each at scaffold time; majors listed are the compatibil
 | Routing | TanStack Router v1, file-based via Vite plugin |
 | Server state | TanStack Query v5 |
 | Tables | TanStack Table v9 (feature-composed via `tableFeatures`) |
+| Drag & drop | dnd-kit (`@dnd-kit/core`, `sortable`, `utilities`) |
 | Validation | Zod v4 |
 | Lint/format | Biome 2 (sole linter and formatter; no ESLint/Prettier) |
 | API mocking | MSW 2 |
@@ -85,6 +86,7 @@ users.tsx (page) → useQuery(['users']) → fetchUsers() → fetch('/api/users'
 - `User` schema: `id`, `name`, `email`, `status` (Zod enum: `active | invited | suspended`). `type User = z.infer<typeof UserSchema>`.
 - `StatusBadge` (atom) maps the status enum to shadcn Badge variants.
 - `SortableColumnHeader` (molecule) is the clickable column header with sort-direction indicator.
+- Rows drag-reorder via a grip-handle column (dnd-kit: `DndContext` + `SortableContext`, pointer and keyboard sensors). Handles disable while a column sort is active — manual order is only meaningful unsorted. Order is client-side only; a refetch re-seeds it.
 
 ## Theming
 
@@ -113,9 +115,9 @@ Class-driven light/dark so the user can override the OS, following the canonical
 
 ## Testing
 
-- **Vitest + RTL (jsdom):** setup file starts MSW's Node server reusing the shared handlers. Proof-of-pattern tests: (1) `UsersTable` renders fetched rows — integration through Query + MSW + Zod; (2) `UserSchema` rejects malformed data; (3) `ThemeProvider`/`ThemeToggle` apply and persist the `dark` class on `<html>` (jsdom lacks `matchMedia`, so the test setup stubs it).
+- **Vitest + RTL (jsdom):** setup file starts MSW's Node server reusing the shared handlers. Proof-of-pattern tests: (1) `UsersTable` renders fetched rows — integration through Query + MSW + Zod; (2) `UserSchema` rejects malformed data; (3) `ThemeProvider`/`ThemeToggle` apply and persist the `dark` class on `<html>` (jsdom lacks `matchMedia`, so the test setup stubs it); (4) drag handles render per row and disable while sorted (jsdom can't do drag geometry — the drag itself is e2e's job).
 - **Storybook 10:** stories for every atom/molecule/organism, plus representative ui-layer stories (Button, Badge) living beside the generated files (re-running `shadcn add` overwrites the component file, never the story). `UsersTable` story fetches through the MSW addon; a theme toolbar renders any story in light or dark.
-- **Playwright e2e (`e2e/`):** config auto-launches the dev server (`webServer`); MSW's service worker is active in the browser, so e2e needs no separate mocks. One smoke spec: load `/`, see hello card, navigate to `/users`, assert rows render, a column sorts on click, and the theme toggle flips `<html>` into dark mode.
+- **Playwright e2e (`e2e/`):** config auto-launches the dev server (`webServer`); MSW's service worker is active in the browser, so e2e needs no separate mocks. One smoke spec: load `/`, see hello card, navigate to `/users`, assert rows render, a column sorts on click, and the theme toggle flips `<html>` into dark mode. A second spec drags a row by its handle with real mouse events and asserts the new order, then asserts handles disable under an active sort.
 
 ## Out of Scope
 
