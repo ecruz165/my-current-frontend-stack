@@ -1,4 +1,4 @@
-import { HttpResponse, delay, http } from 'msw';
+import { delay, HttpResponse, http } from 'msw';
 import { users } from './fixtures';
 
 export const handlers = [

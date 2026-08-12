@@ -14,7 +14,9 @@ describe('UserSchema', () => {
   });
 
   it('rejects an unknown status', () => {
-    expect(() => UserSchema.parse({ ...validUser, status: 'banned' })).toThrow();
+    expect(() =>
+      UserSchema.parse({ ...validUser, status: 'banned' }),
+    ).toThrow();
   });
 
   it('rejects a malformed email', () => {

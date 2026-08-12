@@ -1,4 +1,4 @@
-import { UserSchema, type User } from '@/schemas/user';
+import { type User, UserSchema } from '@/schemas/user';
 
 export async function fetchUsers(): Promise<User[]> {
   const response = await fetch('/api/users');
