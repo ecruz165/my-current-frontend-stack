@@ -14,6 +14,8 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, './src') },
   },
+  // Deterministic port for Playwright's webServer health check.
+  server: { port: 5173, strictPort: true },
   test: {
     environment: 'jsdom',
     globals: true,
