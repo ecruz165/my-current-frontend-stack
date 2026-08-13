@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { UserSchema } from './user';
+import { InviteUserSchema, UserSchema } from './user';
 
 const validUser = {
   id: 'u-01',
@@ -28,5 +28,22 @@ describe('UserSchema', () => {
   it('rejects a missing field', () => {
     const { email: _email, ...withoutEmail } = validUser;
     expect(() => UserSchema.parse(withoutEmail)).toThrow();
+  });
+});
+
+describe('InviteUserSchema', () => {
+  it('accepts a user without an id', () => {
+    const { id: _id, ...invite } = validUser;
+    expect(InviteUserSchema.parse(invite)).toEqual(invite);
+  });
+
+  it('strips the id field (invites have no id)', () => {
+    expect(InviteUserSchema.parse(validUser)).not.toHaveProperty('id');
+  });
+
+  it('rejects a malformed invite', () => {
+    expect(() =>
+      InviteUserSchema.parse({ name: 'X', email: 'nope', status: 'active' }),
+    ).toThrow();
   });
 });
