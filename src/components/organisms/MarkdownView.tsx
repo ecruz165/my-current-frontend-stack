@@ -30,14 +30,41 @@ function ShikiBlock({ code, lang }: { code: string; lang: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
+// Theme signal that works with and without ThemeProvider: the app's
+// provider and Storybook's toolbar both toggle the dark class on <html>,
+// so the class itself is the one source both worlds share.
+function useIsDark() {
+  const [isDark, setIsDark] = useState(() =>
+    document.documentElement.classList.contains('dark'),
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  return isDark;
+}
+
 function MermaidBlock({ code }: { code: string }) {
   const [svg, setSvg] = useState<string | null>(null);
+  const isDark = useIsDark();
 
   useEffect(() => {
     let cancelled = false;
     import('mermaid')
       .then(async ({ default: mermaid }) => {
-        mermaid.initialize({ startOnLoad: false, theme: 'neutral' });
+        // Mermaid themes are fixed at render time, so re-render on toggle.
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: isDark ? 'dark' : 'neutral',
+        });
         const { svg: rendered } = await mermaid.render(
           `mmd-${Math.random().toString(36).slice(2)}`,
           code,
@@ -50,7 +77,7 @@ function MermaidBlock({ code }: { code: string }) {
     return () => {
       cancelled = true;
     };
-  }, [code]);
+  }, [code, isDark]);
 
   if (!svg) return <pre className="overflow-x-auto text-sm">{code}</pre>;
   // biome-ignore lint/security/noDangerouslySetInnerHtml: local mermaid output

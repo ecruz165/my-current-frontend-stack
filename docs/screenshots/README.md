@@ -50,7 +50,7 @@ react-hook-form + Zod with a completed submission — the confirmation id was as
 
 ## Dark mode
 
-Captured with the browser's color scheme set to dark and no toggle click — the `system` theme default resolving on its own. shadcn's `.dark` CSS variables, shiki's dual-theme output, and xyflow's `colorMode="system"` all follow; mermaid keeps its fixed neutral theme (initialized once, doesn't track the toggle).
+Captured with the browser's color scheme set to dark and no toggle click — the `system` theme default resolving on its own. shadcn's `.dark` CSS variables, shiki's dual-theme output, xyflow's `colorMode="system"`, and mermaid (re-rendered with its dark theme via a class observer on `<html>`) all follow.
 
 | | |
 | --- | --- |
