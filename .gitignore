@@ -30,3 +30,6 @@ storybook-static/
 
 # Browser tool artifacts
 .playwright-mcp/
+
+# Stray screenshots at repo root (canonical ones live in docs/screenshots/)
+/*.png
