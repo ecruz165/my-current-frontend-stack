@@ -10,11 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemosRouteRouteImport } from './routes/demos/route'
 import { Route as UsersRouteImport } from './routes/users'
+import { Route as DemosIndexRouteImport } from './routes/demos/index'
+import { Route as DemosEditorRouteImport } from './routes/demos/editor'
+import { Route as DemosFlowRouteImport } from './routes/demos/flow'
+import { Route as DemosFormRouteImport } from './routes/demos/form'
+import { Route as DemosMarkdownRouteImport } from './routes/demos/markdown'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemosRouteRoute = DemosRouteRouteImport.update({
+  id: '/demos',
+  path: '/demos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UsersRoute = UsersRouteImport.update({
@@ -22,30 +33,97 @@ const UsersRoute = UsersRouteImport.update({
   path: '/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemosIndexRoute = DemosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemosRouteRoute,
+} as any)
+const DemosEditorRoute = DemosEditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => DemosRouteRoute,
+} as any)
+const DemosFlowRoute = DemosFlowRouteImport.update({
+  id: '/flow',
+  path: '/flow',
+  getParentRoute: () => DemosRouteRoute,
+} as any)
+const DemosFormRoute = DemosFormRouteImport.update({
+  id: '/form',
+  path: '/form',
+  getParentRoute: () => DemosRouteRoute,
+} as any)
+const DemosMarkdownRoute = DemosMarkdownRouteImport.update({
+  id: '/markdown',
+  path: '/markdown',
+  getParentRoute: () => DemosRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/demos': typeof DemosRouteRouteWithChildren
   '/users': typeof UsersRoute
+  '/demos/editor': typeof DemosEditorRoute
+  '/demos/flow': typeof DemosFlowRoute
+  '/demos/form': typeof DemosFormRoute
+  '/demos/markdown': typeof DemosMarkdownRoute
+  '/demos/': typeof DemosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/users': typeof UsersRoute
+  '/demos/editor': typeof DemosEditorRoute
+  '/demos/flow': typeof DemosFlowRoute
+  '/demos/form': typeof DemosFormRoute
+  '/demos/markdown': typeof DemosMarkdownRoute
+  '/demos': typeof DemosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/demos': typeof DemosRouteRouteWithChildren
   '/users': typeof UsersRoute
+  '/demos/editor': typeof DemosEditorRoute
+  '/demos/flow': typeof DemosFlowRoute
+  '/demos/form': typeof DemosFormRoute
+  '/demos/markdown': typeof DemosMarkdownRoute
+  '/demos/': typeof DemosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/users'
+  fullPaths:
+    | '/'
+    | '/demos'
+    | '/users'
+    | '/demos/editor'
+    | '/demos/flow'
+    | '/demos/form'
+    | '/demos/markdown'
+    | '/demos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/users'
-  id: '__root__' | '/' | '/users'
+  to:
+    | '/'
+    | '/users'
+    | '/demos/editor'
+    | '/demos/flow'
+    | '/demos/form'
+    | '/demos/markdown'
+    | '/demos'
+  id:
+    | '__root__'
+    | '/'
+    | '/demos'
+    | '/users'
+    | '/demos/editor'
+    | '/demos/flow'
+    | '/demos/form'
+    | '/demos/markdown'
+    | '/demos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DemosRouteRoute: typeof DemosRouteRouteWithChildren
   UsersRoute: typeof UsersRoute
 }
 
@@ -58,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demos': {
+      id: '/demos'
+      path: '/demos'
+      fullPath: '/demos'
+      preLoaderRoute: typeof DemosRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/users': {
       id: '/users'
       path: '/users'
@@ -65,11 +150,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demos/': {
+      id: '/demos/'
+      path: '/'
+      fullPath: '/demos/'
+      preLoaderRoute: typeof DemosIndexRouteImport
+      parentRoute: typeof DemosRouteRoute
+    }
+    '/demos/editor': {
+      id: '/demos/editor'
+      path: '/editor'
+      fullPath: '/demos/editor'
+      preLoaderRoute: typeof DemosEditorRouteImport
+      parentRoute: typeof DemosRouteRoute
+    }
+    '/demos/flow': {
+      id: '/demos/flow'
+      path: '/flow'
+      fullPath: '/demos/flow'
+      preLoaderRoute: typeof DemosFlowRouteImport
+      parentRoute: typeof DemosRouteRoute
+    }
+    '/demos/form': {
+      id: '/demos/form'
+      path: '/form'
+      fullPath: '/demos/form'
+      preLoaderRoute: typeof DemosFormRouteImport
+      parentRoute: typeof DemosRouteRoute
+    }
+    '/demos/markdown': {
+      id: '/demos/markdown'
+      path: '/markdown'
+      fullPath: '/demos/markdown'
+      preLoaderRoute: typeof DemosMarkdownRouteImport
+      parentRoute: typeof DemosRouteRoute
+    }
   }
 }
 
+interface DemosRouteRouteChildren {
+  DemosEditorRoute: typeof DemosEditorRoute
+  DemosFlowRoute: typeof DemosFlowRoute
+  DemosFormRoute: typeof DemosFormRoute
+  DemosMarkdownRoute: typeof DemosMarkdownRoute
+  DemosIndexRoute: typeof DemosIndexRoute
+}
+
+const DemosRouteRouteChildren: DemosRouteRouteChildren = {
+  DemosEditorRoute: DemosEditorRoute,
+  DemosFlowRoute: DemosFlowRoute,
+  DemosFormRoute: DemosFormRoute,
+  DemosMarkdownRoute: DemosMarkdownRoute,
+  DemosIndexRoute: DemosIndexRoute,
+}
+
+const DemosRouteRouteWithChildren = DemosRouteRoute._addFileChildren(
+  DemosRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DemosRouteRoute: DemosRouteRouteWithChildren,
   UsersRoute: UsersRoute,
 }
 export const routeTree = rootRouteImport

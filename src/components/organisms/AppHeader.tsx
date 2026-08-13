@@ -25,6 +25,9 @@ export function AppHeader() {
         <Link to="/users" className={linkClass} activeProps={activeProps}>
           Users
         </Link>
+        <Link to="/demos" className={linkClass} activeProps={activeProps}>
+          Demos
+        </Link>
         <div className="ml-auto">
           <ThemeToggle />
         </div>
