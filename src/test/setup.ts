@@ -35,6 +35,18 @@ Object.defineProperty(window, 'localStorage', {
   value: new MemoryStorage(),
 });
 
+// jsdom lacks ResizeObserver; @xyflow/react measures its canvas with it.
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+Object.defineProperty(window, 'ResizeObserver', {
+  writable: true,
+  value: ResizeObserverStub,
+});
+
 // jsdom lacks matchMedia; ThemeProvider's system-theme resolution needs it.
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
