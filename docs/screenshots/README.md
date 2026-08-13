@@ -8,7 +8,7 @@ The component workshop: full atomic-design sidebar taxonomy, with the `UsersTabl
 
 ![Storybook](storybook.png)
 
-The theme toolbar set to dark on the `MarkdownView` story — shiki and mermaid both follow the preview's `dark` class (the manager chrome is Storybook's own and stays light).
+The theme toolbar set to dark on the `UsersTable` story — MSW-fed rows, drag handles, and badge variants all following the preview's `dark` class (the manager chrome is Storybook's own and stays light).
 
 ![Storybook, dark](storybook-dark.png)
 
