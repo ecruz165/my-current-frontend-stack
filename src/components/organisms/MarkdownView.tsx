@@ -73,14 +73,48 @@ function useIsDark() {
   return isDark;
 }
 
+// @mermaid-js/tiny is mermaid's official slim build (same version line,
+// common diagram types only — no cytoscape/katex baggage). It is a
+// classic-script IIFE: its top-level `var` only lands on globalThis when
+// executed as a script, not as an ESM import, so it loads via a <script>
+// tag pointing at the Vite asset URL. The promise is a singleton so
+// concurrent diagrams share one load.
+interface MermaidApi {
+  initialize(config: Record<string, unknown>): void;
+  render(id: string, code: string): Promise<{ svg: string }>;
+}
+
+let mermaidPromise: Promise<MermaidApi> | null = null;
+
+function loadMermaid(): Promise<MermaidApi> {
+  mermaidPromise ??= (async () => {
+    const globals = globalThis as { mermaid?: MermaidApi };
+    if (globals.mermaid) return globals.mermaid;
+    const { default: scriptUrl } = await import(
+      '@mermaid-js/tiny/dist/mermaid.tiny.js?url'
+    );
+    await new Promise<void>((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = scriptUrl;
+      script.onload = () => resolve();
+      script.onerror = () =>
+        reject(new Error('mermaid tiny script failed to load'));
+      document.head.appendChild(script);
+    });
+    if (!globals.mermaid) throw new Error('mermaid global not initialized');
+    return globals.mermaid;
+  })();
+  return mermaidPromise;
+}
+
 function MermaidBlock({ code }: { code: string }) {
   const [svg, setSvg] = useState<string | null>(null);
   const isDark = useIsDark();
 
   useEffect(() => {
     let cancelled = false;
-    import('mermaid')
-      .then(async ({ default: mermaid }) => {
+    loadMermaid()
+      .then(async (mermaid) => {
         // Mermaid themes are fixed at render time, so re-render on toggle.
         // themeVariables only apply with theme 'base', so dark mode builds
         // its look from base + variables tuned to the app's dark palette.
@@ -107,8 +141,10 @@ function MermaidBlock({ code }: { code: string }) {
         );
         if (!cancelled) setSvg(rendered);
       })
-      .catch(() => {
-        if (!cancelled) setSvg(null); // jsdom / bad diagrams: plain fallback
+      .catch((error) => {
+        // jsdom / bad diagrams: plain fallback — but never silently.
+        console.warn('[MermaidBlock] falling back to plain code:', error);
+        if (!cancelled) setSvg(null);
       });
     return () => {
       cancelled = true;
