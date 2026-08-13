@@ -36,7 +36,7 @@ tiptap → tiptap-markdown → `marked` round trip: bolded editor text, its mark
 
 ### Markdown pipeline
 
-react-resizable-panels split: editable source beside the rendered output — GFM table, task list, shiki-highlighted TypeScript, and a mermaid flowchart. "Stream it" replays the document through streamdown from `GET /api/stream`.
+Streaming mode, mid-capture of "Stream it": streamdown replays the document from `GET /api/stream`, fed the app's own slim shiki (highlighted TypeScript) and tiny mermaid (rendered flowchart) through its plugin slots — one engine each, shared with the live-editing view on the left.
 
 ![Markdown demo](demos-markdown.png)
 
