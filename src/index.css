@@ -14,6 +14,13 @@
   color-scheme: dark;
 }
 
+/* Shiki dual-theme output: flip to the dark variables under .dark. */
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
