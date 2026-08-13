@@ -47,3 +47,13 @@ The repo's own architecture as a draggable xyflow canvas.
 react-hook-form + Zod with a completed submission — the confirmation id was assigned by the MSW handler after re-validating with the same `InviteUserSchema` the client used.
 
 ![Form demo](demos-form.png)
+
+## Dark mode
+
+Captured with the browser's color scheme set to dark and no toggle click — the `system` theme default resolving on its own. shadcn's `.dark` CSS variables, shiki's dual-theme output, and xyflow's `colorMode="system"` all follow; mermaid keeps its fixed neutral theme (initialized once, doesn't track the toggle).
+
+| | |
+| --- | --- |
+| ![Demos index, dark](demos-index-dark.png) | ![Editor, dark](demos-editor-dark.png) |
+| ![Markdown, dark](demos-markdown-dark.png) | ![Flow, dark](demos-flow-dark.png) |
+| ![Form, dark](demos-form-dark.png) | |
