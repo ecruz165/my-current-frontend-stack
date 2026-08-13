@@ -16,6 +16,10 @@ export default defineConfig({
   },
   // Deterministic port for Playwright's webServer health check.
   server: { port: 5173, strictPort: true },
+  // Code-split routes are lazily discovered by default; crawling them at
+  // startup prevents mid-session re-optimization full-reloads, which can
+  // wipe in-page state while parallel e2e specs share the dev server.
+  optimizeDeps: { entries: ['index.html', 'src/routes/**/*.tsx'] },
   test: {
     environment: 'jsdom',
     globals: true,

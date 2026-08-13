@@ -27,6 +27,19 @@ test('rows reorder by dragging; handles disable under sort', async ({
   await expect(rows.first()).toContainText('Dana Whitfield');
   await expect(rows.nth(2)).toContainText('Walter Reyes');
 
+  // dnd-kit asynchronously restores focus to a drag handle after the drop
+  // settles (a11y). Interactions racing that window get suppressed or
+  // yanked, so wait for the restoration to land before clicking on.
+  await expect(page.locator(':focus')).toHaveAttribute(
+    'aria-roledescription',
+    'sortable',
+  );
+
+  // The drag's pointer-down and -up hit different elements, so no browser
+  // click fires at drop — leaving dnd-kit's one-shot click suppressor armed
+  // for the next click. Drain it on neutral space before the real click.
+  await page.getByRole('heading', { name: 'Users' }).click();
+
   // Sorting disables the handles: manual order is only meaningful unsorted.
   await page.getByRole('button', { name: 'Name' }).click();
   await expect(
