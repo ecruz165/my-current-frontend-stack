@@ -61,9 +61,24 @@ function MermaidBlock({ code }: { code: string }) {
     import('mermaid')
       .then(async ({ default: mermaid }) => {
         // Mermaid themes are fixed at render time, so re-render on toggle.
+        // themeVariables only apply with theme 'base', so dark mode builds
+        // its look from base + variables tuned to the app's dark palette.
         mermaid.initialize({
           startOnLoad: false,
-          theme: isDark ? 'dark' : 'neutral',
+          theme: isDark ? 'base' : 'neutral',
+          themeVariables: isDark
+            ? {
+                darkMode: true,
+                background: '#171717',
+                primaryColor: '#262626',
+                primaryTextColor: '#fafafa',
+                primaryBorderColor: '#525252',
+                secondaryColor: '#262626',
+                tertiaryColor: '#171717',
+                lineColor: '#a3a3a3',
+                edgeLabelBackground: 'transparent',
+              }
+            : undefined,
         });
         const { svg: rendered } = await mermaid.render(
           `mmd-${Math.random().toString(36).slice(2)}`,
