@@ -12,7 +12,7 @@ import { createJavaScriptRegexEngine } from 'shiki/engine/javascript';
 // plain <pre> below.
 let highlighterPromise: Promise<HighlighterCore> | null = null;
 
-function getHighlighter() {
+export function getHighlighter() {
   highlighterPromise ??= createHighlighterCore({
     themes: [
       import('@shikijs/themes/github-light'),
@@ -79,14 +79,14 @@ function useIsDark() {
 // executed as a script, not as an ESM import, so it loads via a <script>
 // tag pointing at the Vite asset URL. The promise is a singleton so
 // concurrent diagrams share one load.
-interface MermaidApi {
+export interface MermaidApi {
   initialize(config: Record<string, unknown>): void;
   render(id: string, code: string): Promise<{ svg: string }>;
 }
 
 let mermaidPromise: Promise<MermaidApi> | null = null;
 
-function loadMermaid(): Promise<MermaidApi> {
+export function loadMermaid(): Promise<MermaidApi> {
   mermaidPromise ??= (async () => {
     const globals = globalThis as { mermaid?: MermaidApi };
     if (globals.mermaid) return globals.mermaid;

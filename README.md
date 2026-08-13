@@ -21,7 +21,7 @@ A reference architecture for a modern React frontend, built greenfield on 2026-0
 | Validation | Zod v4 — single source of type truth, validated at the network boundary |
 | Forms | react-hook-form + `@hookform/resolvers` (Zod) |
 | Rich text | tiptap 3 (starter-kit, link, underline, extensions, suggestion) + tiptap-markdown |
-| Markdown | react-markdown + remark-gfm/breaks, shiki (core + TS grammar only), mermaid (`@mermaid-js/tiny`), marked, streamdown |
+| Markdown | react-markdown + remark-gfm/breaks, shiki (core + TS grammar only), mermaid (`@mermaid-js/tiny`), marked, streamdown (plugin-fed the same slim shiki + tiny mermaid) |
 | Flow diagrams | @xyflow/react |
 | Layout / motion | react-resizable-panels, motion |
 | Lint/format | Biome 2 (sole linter and formatter — no ESLint/Prettier) |
