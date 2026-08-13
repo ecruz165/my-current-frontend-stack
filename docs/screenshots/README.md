@@ -2,6 +2,12 @@
 
 Captured from the running app (Vite dev server + MSW mock backend), light theme.
 
+## Storybook
+
+The component workshop: full atomic-design sidebar taxonomy, with the `UsersTable` story fetching its rows through the MSW addon.
+
+![Storybook](storybook.png)
+
 ## Users table
 
 The sortable users table: MSW-fed rows, dnd-kit drag handles, `StatusBadge` variants.
