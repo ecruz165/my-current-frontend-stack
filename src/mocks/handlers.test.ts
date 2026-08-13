@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { UserSchema } from '@/schemas/user';
+import { SAMPLE_MARKDOWN } from './sampleMarkdown';
+
+describe('GET /api/stream handler', () => {
+  it('streams the sample markdown in chunks', async () => {
+    const response = await fetch('/api/stream');
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe(SAMPLE_MARKDOWN);
+  });
+});
 
 describe('POST /api/invites handler', () => {
   it('creates a user from a valid invite', async () => {
