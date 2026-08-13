@@ -2,18 +2,39 @@ import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
-import { codeToHtml } from 'shiki';
+import { createHighlighterCore, type HighlighterCore } from 'shiki/core';
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript';
+
+// Fine-grained shiki: only the TS grammar and the two github themes ship
+// (the full bundle emits every grammar as its own chunk, several MB of
+// dist), and the JavaScript regex engine drops the oniguruma wasm chunk.
+// Unknown fence languages throw at highlight time and fall back to the
+// plain <pre> below.
+let highlighterPromise: Promise<HighlighterCore> | null = null;
+
+function getHighlighter() {
+  highlighterPromise ??= createHighlighterCore({
+    themes: [
+      import('@shikijs/themes/github-light'),
+      import('@shikijs/themes/github-dark'),
+    ],
+    langs: [import('@shikijs/langs/typescript')],
+    engine: createJavaScriptRegexEngine(),
+  });
+  return highlighterPromise;
+}
 
 function ShikiBlock({ code, lang }: { code: string; lang: string }) {
   const [html, setHtml] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    codeToHtml(code, {
-      lang,
-      themes: { light: 'github-light', dark: 'github-dark' },
-    })
-      .then((result) => {
+    getHighlighter()
+      .then((highlighter) => {
+        const result = highlighter.codeToHtml(code, {
+          lang,
+          themes: { light: 'github-light', dark: 'github-dark' },
+        });
         if (!cancelled) setHtml(result);
       })
       .catch(() => {
