@@ -58,6 +58,6 @@ Captured with the browser's color scheme set to dark and no toggle click — the
 
 | | |
 | --- | --- |
-| ![Demos index, dark](demos-index-dark.png) | ![Editor, dark](demos-editor-dark.png) |
-| ![Markdown, dark](demos-markdown-dark.png) | ![Flow, dark](demos-flow-dark.png) |
-| ![Form, dark](demos-form-dark.png) | |
+| ![Users, dark](users-page-dark.png) | ![Demos index, dark](demos-index-dark.png) |
+| ![Editor, dark](demos-editor-dark.png) | ![Markdown, dark](demos-markdown-dark.png) |
+| ![Flow, dark](demos-flow-dark.png) | ![Form, dark](demos-form-dark.png) |
